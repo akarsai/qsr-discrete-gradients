@@ -1,0 +1,2 @@
+# ensure that this directory is present in the git tree
+!.gitignore

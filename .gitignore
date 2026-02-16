@@ -1,0 +1,9 @@
+# python
+*.py[codz]
+
+# pycharm
+.idea
+
+# uv
+uv.lock
+.venv
