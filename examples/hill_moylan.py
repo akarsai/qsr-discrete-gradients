@@ -29,12 +29,13 @@ class HillMoylan(NonlinearAffineSystem):
         models the nonlinear  system
 
         d/dt z = - z - (alpha z)/(1+z^4) + 2 lam u
-        y = (alpha z)/(1+z^4) + lam u
+        y = - (alpha z)/(1+z^4) + lam u
 
-        found in the reference 10.1109/TAC.1980.1102463 .
+        found in the reference 10.1109/TAC.1980.1102463 (with the signs
+        of the nonlinearities in the dynamics and in the output changed).
         the system is dissipative with the quadratic supply
 
-        s(u,y) = lam u^2 - y^2
+        s(u,y) = lam^2 u^2 - y^2
 
         and a storage function is H(z) = alpha/2 arctan(z^2)
 
@@ -56,7 +57,7 @@ class HillMoylan(NonlinearAffineSystem):
         super().__init__(
             f = lambda z: (- z[0] - (self.alpha * z[0])/(1 + z[0]**4)).reshape((1,)),
             g = lambda z: jnp.array([2 * self.lam]).reshape((1,1)),
-            h = lambda z: (self.alpha * z[0])/(1 + z[0]**4),
+            h = lambda z: - (self.alpha * z[0])/(1 + z[0]**4),
             k = lambda z: jnp.array([self.lam]).reshape((1,1)),
             initial_state = initial_state,
             ncontrol = 1,

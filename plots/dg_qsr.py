@@ -42,7 +42,7 @@ if __name__ == '__main__':
     abs_cosine_control = jax.vmap(lambda t: jnp.array([jnp.abs(jnp.cos(10*t))]))
     bump_control = jax.vmap(lambda t: jnp.array([jnp.exp(-(t-4)**2) + jnp.exp(-(t-7)**2)]))
     square_control = jax.vmap(lambda t: jnp.array([jnp.sign(jnp.sin(5*t))]))
-    sharp_control = jax.vmap(lambda t: jnp.array([jnp.min(jnp.array([t**2, jnp.exp(-t)]))]))
+    rise_decay_control = jax.vmap(lambda t: jnp.array([t**2 * jnp.exp(-t)]))
     negative_control = jax.vmap(lambda t: jnp.array([-2]))
 
     # plants
@@ -116,10 +116,10 @@ if __name__ == '__main__':
             system_label = r'Example~\ref{ex:pendulum}'
         elif tested_system == 'pi_controller':
             system = pi_controller
-            control = sharp_control
+            control = rise_decay_control
             ell = lambda z: jnp.zeros((system.ncontrol,))
             W = lambda z: jnp.zeros((system.ncontrol, system.ncontrol))
-            QSR = (jnp.zeros((system.ncontrol, system.ncontrol)), 1/2 * jnp.eye(system.ncontrol), - pi_controller.k_I * jnp.eye(system.ncontrol))
+            QSR = (jnp.zeros((system.ncontrol, system.ncontrol)), 1/2 * jnp.eye(system.ncontrol), - pi_controller.k_P * jnp.eye(system.ncontrol))
             system_label = r'Example~\ref{ex:pi-controller}'
         elif tested_system == 'hill_moylan':
             system = hill_moylan
